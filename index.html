@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="แคลอรี">
+<title>บันทึกแคลอรี</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#EDF1EE;--card:#fff;--ink:#14221C;--mute:#5E6F67;--line:#D8E0DB;--acc:#1E6B50;--on:#fff;--warn:#C2410C;--burn:#92580A;color-scheme:light;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0F1714;--card:#17221D;--ink:#E6EFEA;--mute:#93A69C;--line:#263430;--acc:#5FC49B;--on:#08140F;--warn:#FB923C;--burn:#E7B35A;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0F1714;--card:#17221D;--ink:#E6EFEA;--mute:#93A69C;--line:#263430;--acc:#5FC49B;--on:#08140F;--warn:#FB923C;--burn:#E7B35A;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;height:100%;display:flex;flex-direction:column;background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans Thai",system-ui,-apple-system,"Thonburi",sans-serif;font-size:16px;line-height:1.45;font-variant-numeric:tabular-nums}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+input{font:inherit;color:inherit;font-size:16px}
+#app{flex:1;overflow-y:auto;padding:8px 16px 24px;max-width:560px;width:100%;margin:0 auto}
+.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.ic{width:44px;height:44px;font-size:26px;border-radius:12px}
+.dl{text-align:center;font-weight:700;font-size:18px;line-height:1.2}
+.dl small{display:block;font-weight:400;color:var(--mute);font-size:13px}
+h1{font-size:22px;margin:8px 0 12px}
+h2{font-size:18px;margin:0 0 12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:12px}
+.ringbox{display:flex;align-items:center;gap:16px}
+.ring{width:132px;height:132px;flex:none}
+.ring circle{fill:none;stroke-width:11}
+.big{font-size:40px;font-weight:700;line-height:1}
+.mute{color:var(--mute)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px;text-align:center}
+.stats button,.stats div{border-radius:12px;padding:8px 4px;border:1px solid var(--line)}
+.stats b{display:block;font-size:20px}
+.stats small{color:var(--mute);font-size:12px}
+.net{margin-top:12px;padding:10px 12px;border-radius:12px;background:var(--bg);font-size:15px;text-align:center}
+.tg{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:12px;font-size:15px}
+.sw{appearance:none;width:52px;height:32px;border-radius:16px;background:var(--line);position:relative;flex:none;transition:background .15s}
+.sw::after{content:"";position:absolute;top:3px;left:3px;width:26px;height:26px;border-radius:50%;background:#fff;transition:transform .15s}
+.sw:checked{background:var(--acc)}.sw:checked::after{transform:translateX(20px)}
+.hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.hd h2{margin:0}
+.add{background:var(--acc);color:var(--on);border-radius:12px;padding:8px 14px;font-weight:500;min-height:40px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:12px 0;border-top:1px solid var(--line);width:100%;text-align:left}
+.row:first-of-type{border-top:0}
+.row span{flex:1;min-width:0}
+.row small{display:block;color:var(--mute);font-size:13px}
+.row b{white-space:nowrap}
+.x{color:var(--mute);width:40px;height:40px;font-size:20px;flex:none}
+.empty{color:var(--mute);padding:8px 0;font-size:15px}
+#tabs{display:flex;border-top:1px solid var(--line);background:var(--card)}
+#tabs button{flex:1;padding:14px 0;font-weight:500;color:var(--mute)}
+#tabs button.on{color:var(--acc);box-shadow:inset 0 3px 0 var(--acc)}
+#ov{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:flex-end;justify-content:center;z-index:9}
+#ov[hidden]{display:none}
+#sh{background:var(--card);width:100%;max-width:560px;max-height:88%;overflow-y:auto;border-radius:22px 22px 0 0;padding:20px 16px calc(20px + env(safe-area-inset-bottom,0px))}
+label{display:block;font-size:14px;color:var(--mute);margin:12px 0 4px}
+.in{width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--bg)}
+.btn{width:100%;padding:14px;border-radius:14px;font-weight:700;margin-top:16px;border:1px solid var(--line)}
+.btn.pri{background:var(--acc);color:var(--on);border-color:var(--acc)}
+.btn.dng{color:var(--warn)}
+.opt{display:flex;justify-content:space-between;align-items:center;width:100%;text-align:left;padding:10px 12px;border-radius:12px;border:2px solid var(--line);margin-bottom:8px;gap:8px}
+.opt small{display:block;color:var(--mute);font-size:13px}
+.opt.sel{border-color:var(--acc)}
+.pick{max-height:34vh;overflow-y:auto}
+.qrow{display:flex;gap:8px;margin-top:8px}
+.qrow input{flex:1;text-align:center;font-size:22px;font-weight:700;padding:8px;border-radius:12px;border:1px solid var(--line);background:var(--bg);min-width:0}
+.sq{width:52px;font-size:26px;border-radius:12px;border:1px solid var(--line)}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.chip{padding:8px 14px;border-radius:20px;border:1px solid var(--line);font-size:15px}
+.chip.sel{border-color:var(--acc);color:var(--acc);font-weight:700}
+.prev{text-align:center;font-weight:700;font-size:18px;margin:14px 0 0}
+textarea.in{height:90px;font-size:13px}
+.note{font-size:14px;color:var(--mute);margin:10px 0 0}
+.gal{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.th{position:relative;aspect-ratio:3/4;border-radius:12px;overflow:hidden;background:var(--bg);padding:0}
+.th img{width:100%;height:100%;object-fit:cover;display:block}
+.th small{position:absolute;left:0;right:0;bottom:0;padding:2px 4px;background:rgba(0,0,0,.55);color:#fff;font-size:11px}
+:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<nav id="tabs">
+<button data-v="today" onclick="setView('today')">วันนี้</button>
+<button data-v="menu" onclick="setView('menu')">เมนูอาหาร</button>
+<button data-v="body" onclick="setView('body')">ร่างกาย</button>
+<button data-v="set" onclick="setView('set')">ตั้งค่า</button>
+</nav>
+<div id="ov" hidden onclick="if(event.target===this)closeSheet()"><div id="sh"></div></div>
+<script>
+const $=s=>document.querySelector(s);
+const KEY='kcal-v1';
+function load(){try{const r=localStorage.getItem(KEY);return r?JSON.parse(r):null}catch(e){return null}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+let S=load()||{goal:2000,inc:false,menus:[],days:{}};
+S.body=S.body||{};
+const dk=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const toDate=k=>{const p=k.split('-');return new Date(+p[0],+p[1]-1,+p[2])};
+let view='today',cur=dk(new Date());
+const day=k=>S.days[k]||(S.days[k]={goal:null,food:[],act:[]});
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const n=v=>Math.round(v).toLocaleString('en-US');
+const qf=v=>String(+(+v).toFixed(2));
+const fk=e=>Math.round(e.kcal*e.qty);
+
+function setView(v){view=v;render();$('#app').scrollTop=0}
+function go(d){if(d===0)cur=dk(new Date());else{const t=toDate(cur);t.setDate(t.getDate()+d);cur=dk(t)}render()}
+
+function render(){
+  $('#app').innerHTML=view==='today'?today():view==='menu'?menus():view==='body'?bodyView():settings();
+  document.querySelectorAll('#tabs button').forEach(b=>b.classList.toggle('on',b.dataset.v===view));
+  if(view==='body')loadThumbs();
+}
+
+function today(){
+  const d=day(cur),goal=d.goal==null?S.goal:d.goal;
+  const eaten=d.food.reduce((a,e)=>a+fk(e),0),burned=d.act.reduce((a,e)=>a+e.kcal,0);
+  const allow=goal+(S.inc?burned:0),left=allow-eaten,over=left<0;
+  const pct=allow>0?Math.min(eaten/allow,1):(eaten>0?1:0),C=2*Math.PI*52;
+  const isT=cur===dk(new Date());
+  const dt=toDate(cur).toLocaleDateString('th-TH',{weekday:'long',day:'numeric',month:'long'});
+  return `<div class="top"><button class="ic" onclick="go(-1)" aria-label="วันก่อนหน้า">‹</button>
+  <button class="dl" onclick="go(0)">${isT?'วันนี้':esc(dt)}<small>${isT?esc(dt):'แตะเพื่อกลับไปวันนี้'}</small></button>
+  <button class="ic" onclick="go(1)" aria-label="วันถัดไป">›</button></div>
+  <div class="card"><div class="ringbox">
+  <svg class="ring" viewBox="0 0 120 120"><circle cx="60" cy="60" r="52" stroke="var(--line)"/>
+  <circle cx="60" cy="60" r="52" stroke="${over?'var(--warn)':'var(--acc)'}" stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${C*(1-pct)}" transform="rotate(-90 60 60)"/></svg>
+  <div><div class="mute">${over?'เกินเป้าหมาย':'กินได้อีก'}</div><div class="big" style="color:${over?'var(--warn)':'var(--ink)'}">${n(Math.abs(left))}</div><div class="mute">kcal</div></div></div>
+  <div class="stats"><button onclick="goalSheet()"><b>${n(goal)}</b><small>เป้าหมาย${d.goal==null?'':' (แก้วันนี้)'}</small></button>
+  <div><b>${n(eaten)}</b><small>กินไปแล้ว</small></div>
+  <div><b style="color:var(--burn)">${n(burned)}</b><small>เผาผลาญ</small></div></div>
+  <div class="net">กิน ${n(eaten)} − เผาผลาญ ${n(burned)} = <b>สุทธิ ${n(eaten-burned)} kcal</b></div>
+  <label class="tg"><span>นำแคลอรีที่เผาผลาญไปเพิ่มโควตาอาหาร${S.inc?'<br><small class="mute">โควตา = '+n(goal)+' + '+n(burned)+' = '+n(allow)+' kcal</small>':''}</span>
+  <input type="checkbox" class="sw" ${S.inc?'checked':''} onchange="S.inc=this.checked;save();render()"></label></div>
+  <div class="card"><div class="hd"><h2>อาหาร</h2><button class="add" onclick="foodSheet()">+ เพิ่มอาหาร</button></div>
+  ${d.food.length?d.food.map(e=>`<div class="row"><span>${esc(e.name)}<small>${qf(e.qty)} × ${esc(e.unit)} (${n(e.kcal)} kcal)</small></span><b>${n(fk(e))}</b><button class="x" onclick="delFood('${e.id}')" aria-label="ลบ">✕</button></div>`).join(''):'<div class="empty">ยังไม่ได้บันทึกอาหารของวันนี้</div>'}</div>
+  <div class="card"><div class="hd"><h2>ออกกำลังกาย</h2><button class="add" onclick="actSheet()">+ เพิ่มกิจกรรม</button></div>
+  ${d.act.length?d.act.map(e=>`<div class="row"><span>${esc(e.name)}<small>${esc(e.detail)}</small></span><b style="color:var(--burn)">−${n(e.kcal)}</b><button class="x" onclick="delAct('${e.id}')" aria-label="ลบ">✕</button></div>`).join(''):'<div class="empty">ยังไม่ได้บันทึกกิจกรรมของวันนี้</div>'}</div>`;
+}
+function delFood(id){const d=day(cur);d.food=d.food.filter(e=>e.id!==id);save();render()}
+function delAct(id){const d=day(cur);d.act=d.act.filter(e=>e.id!==id);save();render()}
+
+/* sheets */
+function sheet(h){$('#sh').innerHTML=h;$('#ov').hidden=false}
+function closeSheet(){$('#ov').hidden=true;$('#sh').innerHTML=''}
+
+function foodSheet(){
+  if(!S.menus.length){
+    sheet('<h2>เพิ่มอาหาร</h2><p class="mute">ยังไม่มีเมนูที่บันทึกไว้ สร้างเมนูประจำก่อน แล้วกลับมาเลือกได้ทันที</p><button class="btn pri" id="go">สร้างเมนูแรก</button>');
+    $('#go').onclick=()=>{closeSheet();setView('menu');menuSheet()};return;
+  }
+  let sel=S.menus[0].id;
+  sheet(`<h2>เพิ่มอาหาร</h2><div class="pick">${S.menus.map(m=>`<button class="opt" data-id="${m.id}"><span>${esc(m.name)}<small>1 หน่วย = ${esc(m.unit)}</small></span><b>${n(m.kcal)}</b></button>`).join('')}</div>
+  <label>จำนวนหน่วยที่กิน</label>
+  <div class="qrow"><button class="sq" id="mi">−</button><input id="q" type="number" inputmode="decimal" step="0.5" min="0" value="1"><button class="sq" id="pl">+</button></div>
+  <div class="chips">${[0.5,1,1.5,2,3].map(v=>`<button class="chip" data-q="${v}">${v}</button>`).join('')}</div>
+  <p class="prev" id="pv"></p><button class="btn pri" id="ok">เพิ่มลงวันนี้</button>`);
+  const q=()=>Math.max(0,parseFloat($('#q').value)||0);
+  const upd=()=>{
+    const m=S.menus.find(x=>x.id===sel);
+    document.querySelectorAll('.opt').forEach(b=>b.classList.toggle('sel',b.dataset.id===sel));
+    $('#pv').textContent=qf(q())+' หน่วย = '+n(m.kcal*q())+' kcal';
+  };
+  document.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{sel=b.dataset.id;upd()});
+  document.querySelectorAll('.chip').forEach(b=>b.onclick=()=>{$('#q').value=b.dataset.q;upd()});
+  $('#mi').onclick=()=>{$('#q').value=qf(Math.max(0,q()-0.5));upd()};
+  $('#pl').onclick=()=>{$('#q').value=qf(q()+0.5);upd()};
+  $('#q').oninput=upd;
+  $('#ok').onclick=()=>{
+    if(q()<=0)return;
+    const m=S.menus.find(x=>x.id===sel);
+    day(cur).food.push({id:uid(),name:m.name,unit:m.unit,kcal:m.kcal,qty:q()});
+    save();closeSheet();render();
+  };
+  upd();
+}
+
+const ACTS=[{l:'เดิน (ก้าว)',n:'เดิน',u:'ก้าว',d:8000},{l:'เดิน (นาที)',n:'เดิน',u:'นาที',m:3.5},{l:'วิ่ง',n:'วิ่ง',u:'นาที',m:8},{l:'เล่นเวท',n:'เล่นเวท',u:'นาที',m:4},{l:'ปั่นจักรยาน',n:'ปั่นจักรยาน',u:'นาที',m:6.8},{l:'ว่ายน้ำ',n:'ว่ายน้ำ',u:'นาที',m:6},{l:'แอโรบิก/HIIT',n:'แอโรบิก/HIIT',u:'นาที',m:7},{l:'โยคะ',n:'โยคะ',u:'นาที',m:2.5},{l:'กีฬาอื่น ๆ',n:'กีฬา',u:'นาที',m:5},{l:'กรอกเอง',n:'',u:''}];
+function actSheet(){
+  const w=S.wt||60;let i=0,ed=false;
+  sheet(`<h2>เพิ่มกิจกรรม</h2><div class="chips" style="margin-top:0">${ACTS.map((a,j)=>`<button class="chip" data-i="${j}">${a.l}</button>`).join('')}</div>
+  <label>ชื่อกิจกรรม</label><input class="in" id="an">
+  <div id="am"><label id="al"></label><input class="in" id="aa" type="number" inputmode="decimal" min="0"></div>
+  <label>แคลอรีที่เผาผลาญ (kcal)</label><input class="in" id="ak" type="number" inputmode="numeric" min="0" placeholder="0">
+  <p class="note" id="nt"></p><button class="btn pri" id="ok">เพิ่มลงวันนี้</button>`);
+  const upd=()=>{
+    const a=ACTS[i],v=parseFloat($('#aa').value)||0;
+    if(a.u&&!ed)$('#ak').value=Math.round(a.u==='ก้าว'?v*0.0005*w:a.m*w*v/60)||'';
+  };
+  const pick=j=>{
+    i=j;ed=false;const a=ACTS[j];
+    document.querySelectorAll('.chip').forEach(b=>b.classList.toggle('sel',+b.dataset.i===j));
+    $('#an').value=a.n;$('#am').style.display=a.u?'':'none';
+    $('#al').textContent='จำนวน ('+a.u+')';$('#aa').value=a.u?(a.d||30):'';$('#ak').value='';
+    $('#nt').textContent=a.u?'ประมาณจากน้ำหนัก '+w+' กก. เป็นค่าคร่าว ๆ แก้ตัวเลขเองได้ (ตั้งน้ำหนักที่แท็บตั้งค่า)':'กรอกแคลอรีที่เผาผลาญเอง';
+    upd();
+  };
+  document.querySelectorAll('.chip').forEach(b=>b.onclick=()=>pick(+b.dataset.i));
+  $('#aa').oninput=upd;$('#ak').oninput=()=>{ed=true};
+  $('#ok').onclick=()=>{
+    const a=ACTS[i],name=$('#an').value.trim()||a.n,kcal=Math.round(parseFloat($('#ak').value)||0),v=parseFloat($('#aa').value)||0;
+    if(!name||kcal<=0){(name?$('#ak'):$('#an')).focus();return}
+    day(cur).act.push({id:uid(),name,detail:a.u?n(v)+' '+a.u:'',kcal});
+    save();closeSheet();render();
+  };
+  pick(0);
+}
+function actSheetOld(){
+  const seen={},rec=[];
+  Object.keys(S.days).sort().reverse().forEach(k=>S.days[k].act.forEach(a=>{const s=a.name+'|'+a.detail;if(!seen[s]&&rec.length<6){seen[s]=1;rec.push(a)}}));
+  sheet(`<h2>เพิ่มกิจกรรม</h2>
+  ${rec.length?'<div class="chips" style="margin:0 0 4px">'+rec.map((a,i)=>`<button class="chip" data-i="${i}">${esc(a.name)} ${esc(a.detail)}</button>`).join('')+'</div>':''}
+  <label>กิจกรรม</label><input class="in" id="an" placeholder="เช่น เดิน, เล่นเวท">
+  <label>รายละเอียด</label><input class="in" id="ad" placeholder="เช่น 8,000 ก้าว, 30 นาที">
+  <label>แคลอรีที่เผาผลาญโดยประมาณ (kcal)</label><input class="in" id="ak" type="number" inputmode="numeric" min="0" placeholder="0">
+  <button class="btn pri" id="ok">เพิ่มลงวันนี้</button>`);
+  document.querySelectorAll('.chip').forEach(b=>b.onclick=()=>{const a=rec[b.dataset.i];$('#an').value=a.name;$('#ad').value=a.detail;$('#ak').value=a.kcal});
+  $('#ok').onclick=()=>{
+    const name=$('#an').value.trim(),kcal=Math.round(parseFloat($('#ak').value)||0);
+    if(!name||kcal<=0){$('#an').focus();return}
+    day(cur).act.push({id:uid(),name,detail:$('#ad').value.trim(),kcal});
+    save();closeSheet();render();
+  };
+}
+
+function goalSheet(){
+  const d=day(cur),g=d.goal==null?S.goal:d.goal;
+  sheet(`<h2>เป้าหมายแคลอรีของวันนี้</h2><p class="mute">แก้เฉพาะวันที่กำลังดูอยู่ เป้าหมายปกติ ${n(S.goal)} kcal ไม่เปลี่ยน</p>
+  <label>เป้าหมาย (kcal)</label><input class="in" id="g" type="number" inputmode="numeric" min="0" value="${g}">
+  <button class="btn pri" id="ok">บันทึกเป้าหมายวันนี้</button>
+  ${d.goal==null?'':'<button class="btn" id="rs">ใช้เป้าหมายปกติ</button>'}`);
+  $('#ok').onclick=()=>{const v=Math.round(parseFloat($('#g').value));if(!(v>=0))return;d.goal=v;save();closeSheet();render()};
+  if($('#rs'))$('#rs').onclick=()=>{d.goal=null;save();closeSheet();render()};
+}
+
+/* body log: weight, waist, photos */
+let DB;
+function idb(){return new Promise((res,rej)=>{if(DB)return res(DB);try{const r=indexedDB.open('kcal-photos',1);r.onupgradeneeded=()=>r.result.createObjectStore('p');r.onsuccess=()=>{DB=r.result;res(DB)};r.onerror=()=>rej(r.error)}catch(e){rej(e)}})}
+const pput=(id,v)=>idb().then(d=>new Promise((res,rej)=>{const t=d.transaction('p','readwrite');t.objectStore('p').put(v,id);t.oncomplete=res;t.onerror=()=>rej(t.error)}));
+const pget=id=>idb().then(d=>new Promise(res=>{const q=d.transaction('p').objectStore('p').get(id);q.onsuccess=()=>res(q.result);q.onerror=()=>res(null)})).catch(()=>null);
+const pdel=id=>idb().then(d=>{d.transaction('p','readwrite').objectStore('p').delete(id)}).catch(()=>{});
+function loadThumbs(){document.querySelectorAll('[data-pid]').forEach(el=>pget(el.dataset.pid).then(d=>{if(d)el.src=d}))}
+function shrink(f){return new Promise((res,rej)=>{const u=URL.createObjectURL(f),im=new Image();im.onload=()=>{const s=Math.min(1,800/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*s);c.height=Math.round(im.height*s);c.getContext('2d').drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);res(c.toDataURL('image/jpeg',.72))};im.onerror=rej;im.src=u})}
+const bd=k=>S.body[k]||(S.body[k]={w:null,c:null,p:[]});
+let cm='w',cr=7;
+const sd=t=>t.toLocaleDateString('th-TH',{day:'numeric',month:'short'});
+function setCh(m,r){if(m)cm=m;if(r)cr=r;render()}
+function setBody(k,val){
+  const v=parseFloat(val),b=bd(cur);b[k]=v>0?v:null;
+  if(k==='w'&&b.w&&cur===dk(new Date()))S.wt=b.w;
+  save();$('#ch').innerHTML=chart();
+}
+function addPhoto(inp){
+  const f=inp.files[0];if(!f)return;
+  shrink(f).then(d=>{const id=uid();return pput(id,d).then(()=>{bd(cur).p.push(id);save();render()})}).catch(()=>alert('บันทึกรูปไม่สำเร็จ ลองเลือกรูปอื่นหรือตรวจสอบพื้นที่ในเครื่อง'));
+  inp.value='';
+}
+function photoSheet(id,k){
+  sheet(`<h2>${esc(sd(toDate(k)))}</h2><img data-pid="${id}" alt="" style="width:100%;border-radius:14px;min-height:120px;background:var(--bg)"><button class="btn dng" onclick="delPhoto('${id}','${k}')">ลบรูปนี้</button><button class="btn" onclick="closeSheet()">ปิด</button>`);
+  loadThumbs();
+}
+function delPhoto(id,k){
+  if(!confirm('ลบรูปนี้?'))return;
+  pdel(id);S.body[k].p=S.body[k].p.filter(x=>x!==id);save();closeSheet();render();
+}
+function chart(){
+  const u=cm==='w'?'กก.':'ซม.',end=toDate(cur),st=new Date(end),pts=[];
+  st.setDate(st.getDate()-(cr-1));
+  for(let j=0;j<cr;j++){const t=new Date(end);t.setDate(t.getDate()-(cr-1-j));const b=S.body[dk(t)],v=b?b[cm]:null;if(v!=null)pts.push({j,v,t})}
+  if(!pts.length)return '<div class="empty">ยังไม่มีข้อมูลในช่วงนี้ กรอกค่าด้านบนเพื่อเริ่มดูกราฟ</div>';
+  let mn=Math.min(...pts.map(p=>p.v)),mx=Math.max(...pts.map(p=>p.v));
+  if(mx-mn<1){mn-=.5;mx+=.5}
+  const pd=(mx-mn)*.15;mn-=pd;mx+=pd;
+  const W=320,H=170,L=36,R=10,T=10,B=24,X=j=>L+(W-L-R)*j/(cr-1),Y=v=>T+(H-T-B)*(1-(v-mn)/(mx-mn));
+  const g=[0,1,2].map(i=>{const v=mn+(mx-mn)*i/2,y=Y(v).toFixed(1);return `<line x1="${L}" x2="${W-R}" y1="${y}" y2="${y}" stroke="var(--line)"/><text x="${L-4}" y="${+y+3}" text-anchor="end" font-size="10" fill="var(--mute)">${v.toFixed(1)}</text>`}).join('');
+  const d=pts.map((p,k)=>(k?'L':'M')+X(p.j).toFixed(1)+' '+Y(p.v).toFixed(1)).join('');
+  const dots=pts.map(p=>`<circle cx="${X(p.j).toFixed(1)}" cy="${Y(p.v).toFixed(1)}" r="${cr>10?2.5:3.5}" fill="var(--acc)"/>`).join('');
+  const f=pts[0],l=pts[pts.length-1],df=l.v-f.v;
+  return `<svg viewBox="0 0 ${W} ${H}" style="width:100%;display:block">${g}<path d="${d}" fill="none" stroke="var(--acc)" stroke-width="2" stroke-linejoin="round"/>${dots}<text x="${L}" y="${H-6}" font-size="10" fill="var(--mute)">${sd(st)}</text><text x="${W-R}" y="${H-6}" text-anchor="end" font-size="10" fill="var(--mute)">${sd(end)}</text></svg><p class="note">${pts.length>1?'เปลี่ยนแปลง '+(df>0?'+':'')+df.toFixed(1)+' '+u+' (จาก '+sd(f.t)+' ถึง '+sd(l.t)+')':'มีข้อมูลเพียง 1 วัน คือ '+l.v+' '+u}</p>`;
+}
+function cmpSheet(){
+  const ph=[];Object.keys(S.body).sort().forEach(k=>S.body[k].p.forEach((id,i)=>ph.push({k,id,i,m:S.body[k].p.length})));
+  if(ph.length<2){alert('ต้องมีรูปอย่างน้อย 2 รูปจึงจะเทียบได้');return}
+  const sel=[0,ph.length-1],opts=ph.map((p,j)=>`<option value="${j}">${esc(sd(toDate(p.k)))}${p.m>1?' (รูปที่ '+(p.i+1)+')':''}</option>`).join('');
+  const col=(x,l)=>`<div><b>${l}</b><select class="in" id="s${x}" style="margin:6px 0">${opts}</select><img id="i${x}" alt="" style="width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:12px;background:var(--bg);display:block"><p class="note" id="t${x}"></p></div>`;
+  sheet(`<h2>เทียบรูปก่อน/หลัง</h2><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">${col(0,'ก่อน')}${col(1,'หลัง')}</div><p class="prev" id="df" style="font-size:16px"></p><button class="btn" onclick="closeSheet()">ปิด</button>`);
+  const info=p=>{const b=S.body[p.k];return (b.w!=null?b.w+' กก.':'-')+' / '+(b.c!=null?b.c+' ซม.':'-')};
+  const dif=(a,b,u)=>a==null||b==null?null:(b-a>0?'+':'')+(b-a).toFixed(1)+' '+u;
+  const upd=()=>{
+    [0,1].forEach(x=>{const p=ph[sel[x]];$('#s'+x).value=sel[x];$('#t'+x).textContent='น้ำหนัก / เอว: '+info(p);$('#i'+x).removeAttribute('src');pget(p.id).then(d=>{if(d&&sel[x]===ph.indexOf(p))$('#i'+x).src=d})});
+    const A=ph[sel[0]],B=ph[sel[1]],ba=S.body[A.k],bb=S.body[B.k];
+    const days=Math.round((toDate(B.k)-toDate(A.k))/864e5);
+    const parts=[dif(ba.w,bb.w,'กก.'),dif(ba.c,bb.c,'ซม.')].filter(Boolean);
+    $('#df').textContent='ห่างกัน '+Math.abs(days)+' วัน'+(parts.length?', '+parts.join(', '):'');
+  };
+  [0,1].forEach(x=>$('#s'+x).onchange=e=>{sel[x]=+e.target.value;upd()});
+  upd();
+}
+function bodyView(){
+  const b=bd(cur),isT=cur===dk(new Date());
+  const dt=toDate(cur).toLocaleDateString('th-TH',{weekday:'long',day:'numeric',month:'long'});
+  const ph=[];Object.keys(S.body).forEach(k=>S.body[k].p.forEach(id=>ph.push({k,id})));
+  ph.sort((a,c)=>c.k.localeCompare(a.k));
+  const sg=(on,l,fn)=>`<button class="chip ${on?'sel':''}" onclick="${fn}">${l}</button>`;
+  return `<div class="top"><button class="ic" onclick="go(-1)" aria-label="วันก่อนหน้า">‹</button>
+  <button class="dl" onclick="go(0)">${isT?'วันนี้':esc(dt)}<small>${isT?esc(dt):'แตะเพื่อกลับไปวันนี้'}</small></button>
+  <button class="ic" onclick="go(1)" aria-label="วันถัดไป">›</button></div>
+  <div class="card"><h2>บันทึกร่างกายของวัน</h2>
+  <label style="margin-top:0">น้ำหนักตัว (กก.)</label><input class="in" type="number" inputmode="decimal" step="0.1" min="0" value="${b.w==null?'':b.w}" onchange="setBody('w',this.value)">
+  <label>รอบเอว (ซม.)</label><input class="in" type="number" inputmode="decimal" step="0.1" min="0" value="${b.c==null?'':b.c}" onchange="setBody('c',this.value)">
+  <p class="note">น้ำหนักที่บันทึกวันนี้ จะถูกใช้ประมาณแคลอรีออกกำลังกายด้วย</p></div>
+  <div class="card"><h2>กราฟ</h2>
+  <div class="chips" style="margin:0 0 8px">${sg(cm==='w','น้ำหนัก',"setCh('w')")}${sg(cm==='c','รอบเอว',"setCh('c')")}</div>
+  <div class="chips" style="margin:0 0 12px">${sg(cr===7,'รายสัปดาห์ (7 วัน)',"setCh(0,7)")}${sg(cr===30,'รายเดือน (30 วัน)',"setCh(0,30)")}</div>
+  <div id="ch">${chart()}</div></div>
+  <div class="card"><div class="hd"><h2>รูปถ่าย</h2><div style="display:flex;gap:8px"><button class="add" style="background:var(--bg);color:var(--ink);border:1px solid var(--line)" onclick="cmpSheet()">เทียบรูป</button><label class="add" style="display:inline-block;margin:0;font-size:16px">+ เพิ่มรูป<input type="file" accept="image/*" hidden onchange="addPhoto(this)"></label></div></div>
+  ${ph.length?`<div class="gal">${ph.slice(0,60).map(p=>`<button class="th" onclick="photoSheet('${p.id}','${p.k}')"><img data-pid="${p.id}" alt=""><small>${esc(sd(toDate(p.k)))}</small></button>`).join('')}</div>`:'<div class="empty">ยังไม่มีรูป เพิ่มรูปเพื่อเทียบความเปลี่ยนแปลง</div>'}
+  <p class="note">รูปจะถูกบันทึกในวันที่เลือก เก็บไว้ในเครื่องนี้เท่านั้น และไม่รวมในข้อมูลสำรอง</p></div>`;
+}
+
+/* menus */
+function menus(){
+  return `<h1>เมนูอาหารประจำ</h1><div class="card">
+  ${S.menus.length?S.menus.map(m=>`<button class="row" onclick="menuSheet('${m.id}')"><span>${esc(m.name)}<small>1 หน่วย = ${esc(m.unit)}</small></span><b>${n(m.kcal)} kcal</b></button>`).join(''):'<div class="empty">ยังไม่มีเมนู เพิ่มเมนูที่กินบ่อยพร้อมแคลอรีต่อหนึ่งหน่วยบริโภค</div>'}
+  </div><button class="btn pri" style="margin-top:0" onclick="menuSheet()">+ เพิ่มเมนูใหม่</button>`;
+}
+function menuSheet(id){
+  const m=id?S.menus.find(x=>x.id===id):null;
+  sheet(`<h2>${m?'แก้ไขเมนู':'เพิ่มเมนูใหม่'}</h2>
+  <label>ชื่อเมนู</label><input class="in" id="mn" value="${esc(m?m.name:'')}" placeholder="เช่น ข้าวมันไก่">
+  <label>ปริมาณต่อ 1 หน่วยบริโภค</label><input class="in" id="mu" value="${esc(m?m.unit:'')}" placeholder="เช่น 1 จาน, 1 ถ้วย (200 กรัม)">
+  <label>แคลอรีต่อ 1 หน่วย (kcal)</label><input class="in" id="mk" type="number" inputmode="numeric" min="0" value="${m?m.kcal:''}">
+  <button class="btn pri" id="ok">บันทึกเมนู</button>${m?'<button class="btn dng" id="dl">ลบเมนูนี้</button>':''}
+  <p class="note">การแก้ไขหรือลบเมนู จะไม่เปลี่ยนรายการที่บันทึกในวันก่อนหน้า</p>`);
+  $('#ok').onclick=()=>{
+    const name=$('#mn').value.trim(),unit=$('#mu').value.trim()||'1 หน่วย',kcal=Math.round(parseFloat($('#mk').value));
+    if(!name){$('#mn').focus();return}
+    if(!(kcal>=0)){$('#mk').focus();return}
+    if(m){m.name=name;m.unit=unit;m.kcal=kcal}else S.menus.push({id:uid(),name,unit,kcal});
+    save();closeSheet();render();
+  };
+  if(m)$('#dl').onclick=()=>{if(confirm('ลบเมนู "'+m.name+'" ?')){S.menus=S.menus.filter(x=>x.id!==m.id);save();closeSheet();render()}};
+}
+
+/* settings */
+function settings(){
+  return `<h1>ตั้งค่า</h1><div class="card"><label style="margin-top:0">เป้าหมายแคลอรีปกติต่อวัน (kcal)</label>
+  <input class="in" type="number" inputmode="numeric" min="0" value="${S.goal}" onchange="const v=Math.round(parseFloat(this.value));if(v>=0){S.goal=v;save()}">
+  <p class="note">วันที่ไม่ได้แก้เป้าหมายเอง จะใช้ค่านี้ แก้เฉพาะบางวันได้โดยแตะช่อง “เป้าหมาย” ในหน้าวันนี้</p></div>
+  <div class="card"><label style="margin-top:0">น้ำหนักตัว (กก.) ใช้ประมาณแคลอรีที่เผาผลาญ</label>
+  <input class="in" type="number" inputmode="decimal" min="20" value="${S.wt||60}" onchange="const v=parseFloat(this.value);if(v>=20){S.wt=v;save()}"></div>
+  <div class="card"><h2>สำรองข้อมูล</h2>
+  <p class="note" style="margin-top:0">คัดลอกข้อมูลไปเก็บไว้ในโน้ตได้ และวางกลับมาเพื่อกู้คืนเมื่อเปลี่ยนเครื่อง</p>
+  <textarea class="in" id="bk" style="margin-top:10px"></textarea>
+  <button class="btn" onclick="exportData()">คัดลอกข้อมูลสำรอง</button>
+  <button class="btn" onclick="importData()">กู้คืนจากข้อความที่วาง</button></div>
+  <p class="note">เปิดจากไอคอนบนหน้าจอโฮมเสมอ ข้อมูลจะถูกเก็บไว้ในเครื่องนี้</p>`;
+}
+function exportData(){
+  const t=$('#bk');t.value=JSON.stringify(S);t.select();
+  try{navigator.clipboard.writeText(t.value)}catch(e){}
+}
+function importData(){
+  try{
+    const o=JSON.parse($('#bk').value);
+    if(!o||!Array.isArray(o.menus)||typeof o.days!=='object')throw 0;
+    if(!confirm('ข้อมูลปัจจุบันจะถูกแทนที่ ดำเนินการต่อหรือไม่?'))return;
+    S={goal:o.goal||2000,wt:o.wt,body:o.body||{},inc:!!o.inc,menus:o.menus,days:o.days};save();render();
+  }catch(e){alert('ข้อมูลที่วางไม่ถูกต้อง')}
+}
+render();
+</script>
+</body>
+</html>
